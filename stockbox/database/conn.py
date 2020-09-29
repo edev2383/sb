@@ -1,7 +1,7 @@
 """ testing something here """
 import os
-from pathlib import Path
 from dotenv import load_dotenv
+from pathlib import Path
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -18,6 +18,5 @@ dns: str = f"{prefix}://{user}:{pw}@{host}/{db_name}"
 
 engine = create_engine(dns, echo=False)
 
-Session = sessionmaker(bind = engine)
+Session = sessionmaker(bind=engine)
 session = Session()
-

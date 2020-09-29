@@ -1,7 +1,7 @@
-from .database.conn import session
-from .model.stock import Stock
- 
+# from .database.conn import session
+# from .model.stock import Stock
+from stockbox.ticker import Ticker
+
+
 def run():
-    s1 = Stock(symbol="MSFT")
-    session.add(s1)
-    session.commit()
+    Ticker("MSFt", "1w")
