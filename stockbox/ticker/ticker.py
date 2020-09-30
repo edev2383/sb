@@ -23,7 +23,7 @@ class Ticker:
         self.symbol = symbol.upper()
         self.range = range
         self.history = self.create_history().load()
-        print(self.history)
+        # print(self.history)
 
     def create_history(self):
         return History(self.symbol, self.range)

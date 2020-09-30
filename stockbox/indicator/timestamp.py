@@ -1,4 +1,5 @@
 from .indicator import Indicator
+import pandas as pd
 import datetime
 
 
@@ -11,9 +12,7 @@ class Timestamp(Indicator):
 
         self.dataframe[self.name] = int(
             datetime.datetime.timestamp(
-                datetime.datetime.combine(
-                    datetime.date(self.dataframe["Date"]), datetime.time(22, 0)
-                )
+                pd.to_datetime(self.dataframe["Date"], format="%Y-%m-%d"),
             )
         )
 

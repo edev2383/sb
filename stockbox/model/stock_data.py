@@ -15,4 +15,3 @@ class StockData(Base):
     close = Column(Float)
     volume = Column(Integer)
     date = Column(String)
-    timestamp = Column(Integer)

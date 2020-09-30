@@ -39,7 +39,19 @@ class Acquire:
     def stock_model_exists(self):
         return session.query(Stock).filter(Stock.symbol == self.symbol).first()
 
+    def stock_data_model_exists(self):
+        return (
+            session.query(StockData)
+            .filter(StockData.stock_id == self.stock_id)
+            .first()
+        )
+
     def get_stock_data_model(self):
+        # data_exists = self.stock_data_model_exists()
+        # if not data_exists:
+        #     print("stock data model doesnt exist. Creating")
+        #     Create(self.symbol)
+        # print("pandas reading sql to dataframe")
         return pd.read_sql(
             session.query(StockData)
             .filter(StockData.stock_id == self.stock_id)

@@ -96,55 +96,55 @@ class Range:
     def one_week(self):
         end = self.default_end()
         return {
-            "start": end - (3600 * 24 * 5) - (3600 * self.eodHour),
+            "start": end - (3600 * 24 * 7) - (3600 * self.eodHour),
             "end": end,
         }
 
     def one_month(self):
         end = self.default_end()
         return {
-            "start": end - (3600 * 24 * 21) - (3600 * self.eodHour),
+            "start": end - (3600 * 24 * 30) - (3600 * self.eodHour),
             "end": end,
         }
 
     def three_month(self):
         end = self.default_end()
         return {
-            "start": end - (3600 * 24 * 63) - (3600 * self.eodHour),
+            "start": end - (3600 * 24 * 90) - (3600 * self.eodHour),
             "end": end,
         }
 
     def six_month(self):
         end = self.default_end()
         return {
-            "start": end - (3600 * 24 * 126) - (3600 * self.eodHour),
+            "start": end - (3600 * 24 * 180) - (3600 * self.eodHour),
             "end": end,
         }
 
     def one_year(self):
         end = self.default_end()
         return {
-            "start": end - (3600 * 24 * 252) - (3600 * self.eodHour),
+            "start": end - (3600 * 24 * 365) - (3600 * self.eodHour),
             "end": end,
         }
 
     def two_year(self):
         end = self.default_end()
         return {
-            "start": end - (3600 * 24 * 252 * 2) - (3600 * self.eodHour),
+            "start": end - (3600 * 24 * 365 * 2) - (3600 * self.eodHour),
             "end": end,
         }
 
     def five_year(self):
         end = self.default_end()
         return {
-            "start": end - (3600 * 24 * 252 * 5) - (3600 * self.eodHour),
+            "start": end - (3600 * 24 * 365 * 5) - (3600 * self.eodHour),
             "end": end,
         }
 
     def ten_year(self):
         end = self.default_end()
         return {
-            "start": end - (3600 * 24 * 252 * 10) - (3600 * self.eodHour),
+            "start": end - (3600 * 24 * 365 * 10) - (3600 * self.eodHour),
             "end": end,
         }
