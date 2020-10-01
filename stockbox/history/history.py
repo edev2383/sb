@@ -42,5 +42,4 @@ class History:
         #
         #
         #
-        x = Acquire(self.symbol, self.range)
-        return "tadpole"
+        return Acquire(self.symbol, self.range).process()

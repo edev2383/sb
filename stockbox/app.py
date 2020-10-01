@@ -6,4 +6,5 @@ from stockbox.ticker import Ticker
 
 
 def run():
-    Ticker("GOOG", "1w")
+    x = Ticker("GOOG", "1w")
+    print(x.history())

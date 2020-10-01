@@ -13,7 +13,7 @@ class Range:
         string passed to determine length of history
     eodHour: int
         end of day hour value to determine timestamp, 18 = 6pm
-    timezoneOffset: int
+    timezone_offset: int
         current timezone is EST, -4:00 UTC
 
     Methods
@@ -33,7 +33,7 @@ class Range:
 
     key: str
     eodHour: int = 18
-    timezoneOffset: int = 4
+    timezone_offset: int = 4
 
     def __init__(self, key: str):
         """
@@ -84,7 +84,7 @@ class Range:
         """
         end = datetime.datetime.combine(
             datetime.date.today(),
-            datetime.time(self.timezoneOffset + self.eodHour, 0),
+            datetime.time(self.timezone_offset + self.eodHour, 0),
         )
         return int(datetime.datetime.timestamp(end))
 

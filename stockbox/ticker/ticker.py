@@ -22,8 +22,10 @@ class Ticker:
     def __init__(self, symbol: str, range: str = "1y"):
         self.symbol = symbol.upper()
         self.range = range
-        self.history = self.create_history().load()
-        # print(self.history)
+        self.data = self.create_history().load()
 
     def create_history(self):
         return History(self.symbol, self.range)
+
+    def history(self):
+        return self.data
