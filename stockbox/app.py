@@ -6,5 +6,9 @@ from stockbox.ticker import Ticker
 
 
 def run():
-    x = Ticker("GOOG", "1w")
-    print(x.history())
+    Ticker("GOOG")
+    Ticker("MSFT")
+    Ticker("AMD")
+    Ticker("GLW")
+    Ticker("CORT")
+    # print(x.history().head())

@@ -1,5 +1,6 @@
 import pandas as pd
-import datetime
+import math
+from datetime import datetime
 from sqlalchemy import desc
 from stockbox.market import Market
 from stockbox.create import Create
@@ -27,7 +28,13 @@ class Update:
         self.symbol = symbol
         self.stock_id = stock_id
         self.range = range
-        self.get_diff(dataframe, pd.Series(dataframe["Date"]).max())
+        last_entry = self.get_last_entry_date(dataframe)
+        self.get_diff(dataframe, last_entry)
+
+    def get_last_entry_date(self, dataframe):
+        if dataframe.empty:
+            return None
+        return pd.Series(dataframe["Date"]).max()
 
     def get_diff(self, tmp_dataframe, last_entry_date):
         """Scrape history back `update_range`, then filter the scraped
@@ -41,9 +48,12 @@ class Update:
             last_entry_date (date): [description]
         """
         scraped = Scraper().history(self.symbol, self.update_range)
-        scraped = scraped.drop(columns=["Adj Close"]).round(2)[
-            scraped.Date > last_entry_date.strftime("%Y-%m-%d")
-        ]
+        scraped.rename(columns={"Adj Close": "Adj_Close"}, inplace=True)
+
+        if last_entry_date is not None:
+            scraped = scraped.round(2)[
+                scraped.Date > last_entry_date.strftime("%Y-%m-%d")
+            ]
         if scraped.empty:
             self.return_dataframe = self.cache_dataframe
         else:

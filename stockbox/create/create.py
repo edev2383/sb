@@ -23,7 +23,7 @@ class Create:
 
     def insert_stock_data_model(self, symbol: str):
         history = self.add_stock_id_to_dataframe(self.scrape_yf(symbol))
-        history = history.drop(columns=["Adj Close"])
+        history.rename(columns={"Adj Close": "Adj_Close"}, inplace=True)
         self.commit_stock_data_model(history)
 
     def commit_stock_data_model(self, dataframe):

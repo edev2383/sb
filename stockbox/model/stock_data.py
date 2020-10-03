@@ -13,5 +13,6 @@ class StockData(Base):
     Low = Column(Float)
     Open = Column(Float)
     Close = Column(Float)
+    Adj_Close = Column(Float)
     Volume = Column(Integer)
     Date = Column(String)

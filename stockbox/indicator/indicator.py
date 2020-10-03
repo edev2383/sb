@@ -5,7 +5,7 @@ class Indicator:
     range_two: int
 
     def __init__(self, dataframe, range=None):
-        self.dataframe = dataframe
+        self.df = dataframe
         self.range = range
         self.set_header_name()
 
