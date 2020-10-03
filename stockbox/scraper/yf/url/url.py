@@ -23,7 +23,7 @@ class Url:
 
     def set_params(self):
 
-        print(self.incoming)
+        print(" - Url - setting params ", self.incoming)
         self.url = (
             self.url
             + "period1="
@@ -57,6 +57,8 @@ class Url:
         self.params["period1"] = self.convert_date(self.incoming["date_from"])
 
     def convert_date(self, date):
+        print(" - Url - converting date from string to timestamp")
+        # TODO - change how this is processed
         b = date.split("-")
         t = datetime.datetime(int(b[0]), int(b[1]), int(b[2]), 0, 0)
         return str(int(time.mktime(t.timetuple())))

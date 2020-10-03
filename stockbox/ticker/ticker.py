@@ -1,5 +1,6 @@
 from stockbox.history import History
 import stockbox.indicator as ind
+import traceback
 
 
 class Ticker:
@@ -30,16 +31,22 @@ class Ticker:
         self.range = range
         self.data = self.create_history().load()
         self.set_default_indicators()
-        print("Indicators ] ------------------------------")
-        print(self.data)
+        # print("Indicators ] ------------------------------")
+        # print(self.data)
+        print(f"- ------------------------------------------[End Ticker]-")
+        print(f" ")
 
     def create_history(self):
+        print(f" ")
+        print(f"- ------------------------------------------[Begin Ticker]-")
+        print(f"- Ticker - create history {self.symbol} - {self.range}")
         return History(self.symbol, self.range)
 
     def history(self):
         return self.data
 
     def set_default_indicators(self):
+        print(f"- Ticker - appending default indicators")
         self.data = ind.SimpleMovingAverage(self.data.copy(), 10).process()
         self.data = ind.SimpleMovingAverage(self.data.copy(), 20).process()
         self.data = ind.RelativeStrengthIndex(self.data.copy(), 14).process()

@@ -1,6 +1,7 @@
 import numpy as np
 from datetime import datetime
 import pandas as pd
+import time
 from sqlalchemy import desc
 from stockbox.model import Stock, StockData, StockIndicator, StockIndicatorData
 from stockbox.database import session
@@ -39,6 +40,12 @@ class Acquire:
             [dataframe]: StockData model
         """
         self.stock_id = self.get_stock_model()
+        if not self.stock_model_data_exists():
+            print(f" - Acquire - ({self.symbol}) Data not found. Creating")
+            c = Create(self.symbol)
+            c.set_stock_id(self.symbol)
+            c.insert_stock_data_model(self.symbol)
+            time.sleep(2)
         return Update(
             self.get_stock_data_model(), self.symbol, self.stock_id, self.range
         ).process()
@@ -52,8 +59,10 @@ class Acquire:
         Returns:
             [int]: Stock.id - used to get the StockData model
         """
+        print(f" - Acquire - accessing Stock Model - {self.symbol}")
         stock = self.stock_model_exists()
         if not stock:
+            print(f" - Acquire - Model ({self.symbol}) not found. Creating")
             Create(self.symbol).process()
             stock = self.stock_model_exists()
         return stock.id
@@ -67,6 +76,13 @@ class Acquire:
         """
         return session.query(Stock).filter(Stock.symbol == self.symbol).first()
 
+    def stock_model_data_exists(self):
+        return (
+            session.query(StockData)
+            .filter(StockData.stock_id == self.stock_id)
+            .first()
+        )
+
     def get_stock_data_model(self):
         """
         Get the StockData model by self.symbol and the provided range
@@ -75,6 +91,7 @@ class Acquire:
         Returns:
             dataframe: requested StockData
         """
+        print(f" - Acquire - requesting StockData Model {self.symbol}")
         start = datetime.fromtimestamp(self.range["start"]).date()
         end = datetime.fromtimestamp(self.range["end"]).date()
         return pd.read_sql(

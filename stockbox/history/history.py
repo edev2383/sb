@@ -42,4 +42,5 @@ class History:
         #
         #
         #
+        print(f" - History - calling Acquire - {self.symbol} - {self.range}")
         return Acquire(self.symbol, self.range).process()

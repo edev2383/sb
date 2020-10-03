@@ -27,11 +27,13 @@ class Create:
         self.commit_stock_data_model(history)
 
     def commit_stock_data_model(self, dataframe):
+        print(f" - Create - insert StockData Model {self.symbol}")
         dataframe.to_sql(
             "StockData", con=engine, if_exists="append", index=False
         )
 
     def insert_stock_model(self, symbol: str):
+        print(f" - Create - get or create Stock Model {symbol}")
         exists = self.stock_model_exists(symbol)
         if not exists:
             return self.commit_stock_model(symbol)
@@ -46,6 +48,7 @@ class Create:
         return stock.id
 
     def scrape_yf(self, symbol: str):
+        print(f" - Create - scraping yF {symbol} - {self.default_range}")
         return Scraper().history(symbol, self.default_range)
 
     def stock_model_exists(self, symbol):

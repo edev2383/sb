@@ -47,16 +47,22 @@ class Update:
             tmp_dataframe (df): [description]
             last_entry_date (date): [description]
         """
+        print(
+            f" - Update - scraping history {self.symbol} - {self.update_range}"
+        )
         scraped = Scraper().history(self.symbol, self.update_range)
         scraped.rename(columns={"Adj Close": "Adj_Close"}, inplace=True)
 
         if last_entry_date is not None:
+            print(" - Update - filtering scraped results...")
             scraped = scraped.round(2)[
                 scraped.Date > last_entry_date.strftime("%Y-%m-%d")
             ]
         if scraped.empty:
+            print(" - Update - no new values found, returning original data")
             self.return_dataframe = self.cache_dataframe
         else:
+            print(" - Update - new values filtered and storing to DB")
             scraped["stock_id"] = self.stock_id
             self.store_new_stock_data_model(scraped)
             self.return_dataframe = self.get_stock_model_data()

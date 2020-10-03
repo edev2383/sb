@@ -59,6 +59,7 @@ class Range:
             "5y": self.five_year,
             "10y": self.ten_year,
         }
+        print(f" - Range - generate range from provided key {self.key}")
         func = switch.get(self.key)
         return func()
 

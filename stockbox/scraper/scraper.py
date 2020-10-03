@@ -26,6 +26,7 @@ class Scraper:
                          attrs
         """
         r = Range(range).generate_range()
+        print(" - Scraper - return YahooFinance().history()")
         return YahooFinance().history(
             {
                 "symbol": symbol,
