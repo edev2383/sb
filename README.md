@@ -29,3 +29,4 @@ down to the following dictionary:
 
 Todos - 
 - Reorg modules
+- first pass on Rule syntax, will refine before v1.0.0
