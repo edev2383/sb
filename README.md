@@ -17,11 +17,11 @@ down to the following dictionary:
         },
   "operator": ">",
   "comparison": {
-        "key": SMA(5)
+        "key": "SMA(5)",
         "from_index": 0,
         "extension": {
-                "operator": *
-                "value": 1.02
+                "operator": *,
+                "value": 1.02,
                 }
         }
 }
