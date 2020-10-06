@@ -1,6 +1,6 @@
 # Stockbox
 
-Stockbox is an equity testing suite that scrapes yahoo finance for ticker data. Returns a dataframe and calculates indicators
+Stockbox is an equity testing suite that scrapes yahoo finance for ticker data. Returns a dataframe and calculates indicators. Backtesting will allow for 5-10 yrs of equity pattern recognition and allow the user to test complex stock position setups. 
 
 Docs to come...
 
