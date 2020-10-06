@@ -11,17 +11,17 @@ RuleParser breaks a statement
 down to the following dictionary:
 ```python
 { 
-  focus: { 
-        key: Close,
-        from_index: 3,
+  "focus": { 
+        "key": "Close",
+        "from_index": 3,
         },
-  operator: >,
-  comparison: {
-        key: SMA(5)
-        from_index: 0,
-        extension: {
-                operator: *
-                value: 1.02
+  "operator": ">",
+  "comparison": {
+        "key": SMA(5)
+        "from_index": 0,
+        "extension": {
+                "operator": *
+                "value": 1.02
                 }
         }
 }
