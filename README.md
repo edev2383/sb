@@ -9,7 +9,7 @@ RuleParser breaks a statement
 > [Close(3)] < [SMA(5) * 1.02] 
 
 down to the following dictionary:
-'''
+```python
 { 
   focus: { 
         key: Close,
@@ -25,7 +25,7 @@ down to the following dictionary:
                 }
         }
 }
-'''
+```
 
 Todos - 
 - Reorg modules
