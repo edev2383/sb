@@ -15,7 +15,7 @@ down to the following dictionary:
         "key": "Close",
         "from_index": 3,
         },
-  "operator": ">",
+  "operator": "<",
   "comparison": {
         "key": "SMA(5)",
         "from_index": 0,
