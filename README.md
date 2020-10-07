@@ -61,6 +61,7 @@ Other examples of valid statements:
 RuleSets are a collection of rules, which are used to determine a Setup, i.e., a particular configuration pattern on the stock chart.
 
 > More docs to come
+
 Rules (note for later):
 RuleParser breaks a statement
 > [Close(3)] < [SMA(5) * 1.02] 
