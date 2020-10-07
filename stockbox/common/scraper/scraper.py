@@ -1,5 +1,5 @@
 from .yf import YahooFinance
-from stockbox.range import Range
+from stockbox.common.range import Range
 
 
 class Scraper:

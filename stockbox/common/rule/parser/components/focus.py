@@ -60,7 +60,7 @@ class Focus(StatementComponent):
         Returns:
             dict:
         """
-        if self.is_candlekey(self.component):
+        if self.is_candlekey(match.group(1).strip()):
             return {
                 "key": match.group(1).strip(),
                 "from_index": match.group(2).strip(),
@@ -85,4 +85,4 @@ class Focus(StatementComponent):
         Returns:
             boolean:
         """
-        return key in self.candle_keys
+        return key.lower() in self.candle_keys

@@ -16,5 +16,23 @@ class Rule:
     """
 
     def __init__(self, statement, df=0):
-        x = RuleParser(statement).process()
-        print("x: ", x)
+        self.rule = RuleParser(statement).process()
+        self.df = df
+        print(f"rule: {self.rule}")
+
+    def process(self):
+        x = 1
+
+
+#
+# How to process these?
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#

@@ -1,6 +1,6 @@
 # import stockbox.model as model
-from stockbox.range import Range
-from stockbox.acquire import Acquire
+from stockbox.common.range import Range
+from stockbox.common.acquire import Acquire
 
 
 class History:

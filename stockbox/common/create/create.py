@@ -1,7 +1,6 @@
-from stockbox.model import Stock, StockData
-from stockbox.database import session
-from stockbox.scraper import Scraper
-from stockbox.database import engine
+from stockbox.common.model import Stock, StockData
+from stockbox.common.database import session, engine
+from stockbox.common.scraper import Scraper
 
 """Initial acquisition of a non-existant ticker symbol
 Create will add the Stock model and scrape yf for the 5y default

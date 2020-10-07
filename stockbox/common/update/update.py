@@ -2,11 +2,11 @@ import pandas as pd
 import math
 from datetime import datetime
 from sqlalchemy import desc
-from stockbox.market import Market
-from stockbox.create import Create
-from stockbox.database import session
-from stockbox.model import StockData
-from stockbox.scraper import Scraper
+from stockbox.common.market import Market
+from stockbox.common.create import Create
+from stockbox.common.database import session
+from stockbox.common.model import StockData
+from stockbox.common.scraper import Scraper
 
 
 class Update:
@@ -28,8 +28,12 @@ class Update:
         self.symbol = symbol
         self.stock_id = stock_id
         self.range = range
-        last_entry = self.get_last_entry_date(dataframe)
-        self.get_diff(dataframe, last_entry)
+        if Market.is_open():
+            print(" - Update - Market is open. Returning current dataframe.")
+            self.return_dataframe = self.cache_dataframe
+        else:
+            last_entry = self.get_last_entry_date(dataframe)
+            self.get_diff(dataframe, last_entry)
 
     def get_last_entry_date(self, dataframe):
         if dataframe.empty:

@@ -1,5 +1,5 @@
 from .indicator import Indicator
-from stockbox.helpers import rsi
+from stockbox.common.helpers import rsi
 
 
 class RelativeStrengthIndex(Indicator):
