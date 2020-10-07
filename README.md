@@ -34,8 +34,8 @@ Todos -
 
 |--sb/
 |--|--stockbox/
-|--|--|--common/   <= modules that are only called internally
-|--|--|--core/    <= modules that may be called externally
+|--|--|--common/    <= modules that are only called internally
+|--|--|--core/      <= modules that may be called externally
 |--|--|--tests/    
 |--|--|--app.py
 ```
