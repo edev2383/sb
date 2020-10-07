@@ -28,6 +28,15 @@ down to the following dictionary:
 ```
 
 Todos - 
-- Reorg modules
+- Reorg modules, define internal vs pos. external modules and reorg accordingly
+```
+[structure]
+
+|--/sb
+|--|--/common   <= modules that are only called internally
+|--|--/core     <= modules that may be called externally
+|--|--/tests    
+|--|--.app.py
+```
 - first pass on Rule syntax, will refine before v1.0.0
 - comment the indicator math formulas on next commit
