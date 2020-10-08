@@ -1,4 +1,4 @@
-from stockbox.core.rule import Rule
+from stockbox.core.rule import Rule, RuleSet
 from stockbox.core.ticker import Ticker
 
 # from stockbox.ticker import Ticker
@@ -8,11 +8,17 @@ def run():
 
     x = Ticker("Goog").history()
 
-    print(x)
-
     print("start rule doing")
-    y = Rule("[RSI(14)]<[40]", x)
-    print("y: ", y.process())
+    a = Rule("[RSI(14)]<[40]", x)
+    b = Rule("[Close] < [Open]", x)
+    c = Rule("[High] < [SMA(10) * 0.99]", x)
+
+    rs = RuleSet("Testing")
+    rs.add(a)
+    rs.add(b)
+    rs.add(c)
+
+    rs.process()
     # x = Rule("[Close] > [SMA(20)]", x)
 
     # x = RuleParser("Close > 45")

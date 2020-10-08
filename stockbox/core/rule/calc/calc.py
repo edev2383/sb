@@ -1,5 +1,5 @@
 class Calc:
-    """[summary]
+    """Perform basic calculations based on provided values and operator
 
     Returns:
         [type]: [description]
