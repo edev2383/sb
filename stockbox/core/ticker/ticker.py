@@ -1,5 +1,5 @@
-from stockbox.history import History
-import stockbox.indicator as ind
+from stockbox.common.history import History
+import stockbox.common.indicator as ind
 import traceback
 
 
@@ -15,12 +15,7 @@ class Ticker:
     # --
     #
     #
-    #
-    #
-    #
-    #
-    #
-    #
+
     data = None
     indicators = None
     symbol = ""

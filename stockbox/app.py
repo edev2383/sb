@@ -1,25 +1,19 @@
-# from stockbox.rule import Rule
-from stockbox import Market
+from stockbox.core.rule import Rule
+from stockbox.core.ticker import Ticker
 
 # from stockbox.ticker import Ticker
 
 
 def run():
 
-    # t = Ticker("GLW", "1m")
+    x = Ticker("Goog").history()
 
-    y = Market.is_after_close()
-    print("is after close: ", y)
+    print(x)
 
-    y = Market.is_open()
-    print("is open: ", y)
-
-    y = Market.is_trading_day()
-    print("is trading day ", y)
-
-    # x = Rule("[Open(3)]<[Close(5) * 1.25]")
-    # x = Rule("[Open] >= [SMA(65)]")
-    # x = Rule("[Open(78)]< [Close(1) / 1.03]")
+    print("start rule doing")
+    y = Rule("[RSI(14)]<[40]", x)
+    print("y: ", y.process())
+    # x = Rule("[Close] > [SMA(20)]", x)
 
     # x = RuleParser("Close > 45")
     # x = RuleParser("Industry is plutonium")

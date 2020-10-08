@@ -1,4 +1,5 @@
 # import stockbox.model as model
+import pandas as pd
 from stockbox.common.range import Range
 from stockbox.common.acquire import Acquire
 
