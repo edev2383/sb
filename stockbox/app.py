@@ -9,7 +9,7 @@ def run():
 
     x = Ticker("Goog")
 
-    y = IndicatorFactory.create("SMA(25)", x)
+    y = IndicatorFactory.create("SMA(18)", x)
 
     print(y)
     # print("start rule doing")

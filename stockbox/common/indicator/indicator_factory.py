@@ -1,14 +1,13 @@
 import re
-from stockbox.core.ticker import Ticker
 from .relative_strength_index import RelativeStrengthIndex
 from .simple_moving_average import SimpleMovingAverage
 from .slow_stochastic import SlowStochastic
+from .exponential_moving_average import ExponentialMovingAverage
 
 
 class IndicatorFactory:
 
     tag: str
-    Ticker: Ticker
 
     re_range = r"(.*)\(([0-9]+)\)"
 
@@ -17,6 +16,12 @@ class IndicatorFactory:
         self.Ticker = Ticker
 
     def process(self):
+        """Get the key and range from the provided tag, use those values
+        to create the Indicator w/ switch()
+
+        Returns:
+            []: [description]
+        """
         found = re.match(self.re_range, self.tag)
         if found:
             indicator_key = found.group(1).strip().lower()
@@ -24,15 +29,39 @@ class IndicatorFactory:
             return self.switch(indicator_key, indicator_range).process()
 
     def switch(self, key: str, range: int):
+        """switch to create and return the proper indicator object
+
+        Args:
+            key (str):
+            range (int): [description]
+
+        Returns:
+            [type]: [description]
+        """
         switcher = {
             "sma": SimpleMovingAverage,
             "slosto": SlowStochastic,
             "slowsto": SlowStochastic,
             "rsi": RelativeStrengthIndex,
+            "ema": ExponentialMovingAverage,
         }
         func = switcher.get(key)
-        return func(self.Ticker.history(), range)
+        if func:
+            return func(self.Ticker.history().copy(), range)
+        else:
+            print(f"Provided indicator key not found: {key}")
+            print(f"Valid keys: ", switcher.keys())
+            exit()
 
     @staticmethod
     def create(indicator_tag, Ticker):
+        """Static method to create the indicator and return the history
+
+        Args:
+            indicator_tag (str): [description]
+            Ticker (Ticker): [description]
+
+        Returns:
+            [type]: [description]
+        """
         return IndicatorFactory(indicator_tag, Ticker).process()

@@ -1,5 +1,5 @@
 from stockbox.common.history import History
-import stockbox.common.indicator as ind
+from stockbox.common.indicator.indicator_factory import IndicatorFactory
 import traceback
 
 
@@ -42,7 +42,14 @@ class Ticker:
 
     def set_default_indicators(self):
         print(f"- Ticker - appending default indicators")
-        self.data = ind.SimpleMovingAverage(self.data.copy(), 10).process()
-        self.data = ind.SimpleMovingAverage(self.data.copy(), 20).process()
-        self.data = ind.RelativeStrengthIndex(self.data.copy(), 14).process()
-        self.data = ind.SlowStochastic(self.data.copy(), 14).process()
+        self.data = IndicatorFactory.create("EMA(10)", self)
+        self.data = IndicatorFactory.create("SMA(10)", self)
+        self.data = IndicatorFactory.create("SMA(20)", self)
+        self.data = IndicatorFactory.create("SMA(50)", self)
+        self.data = IndicatorFactory.create("SMA(200)", self)
+        self.data = IndicatorFactory.create("SloSto(14)", self)
+        self.data = IndicatorFactory.create("RSI(14)", self)
+        # self.data = ind.SimpleMovingAverage(self.data.copy(), 10).process()
+        # self.data = ind.SimpleMovingAverage(self.data.copy(), 20).process()
+        # self.data = ind.RelativeStrengthIndex(self.data.copy(), 14).process()
+        # self.data = ind.SlowStochastic(self.data.copy(), 14).process()

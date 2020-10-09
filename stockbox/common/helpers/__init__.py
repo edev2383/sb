@@ -1,1 +1,1 @@
-from .lib import rsi
+from .lib import rsi, column_index
