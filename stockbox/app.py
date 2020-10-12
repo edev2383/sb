@@ -1,26 +1,37 @@
 from stockbox.core.rule import Rule, RuleSet
 from stockbox.common.indicator import IndicatorFactory
 from stockbox.core.ticker import Ticker
+from stockbox.core.setup import Setup
 
 # from stockbox.ticker import Ticker
 
 
 def run():
 
-    x = Ticker("Goog")
+    ticker = Ticker("Goog")
 
-    y = IndicatorFactory.create("SMA(18)", x)
+    # y = IndicatorFactory.create("SMA(18)", x)
 
-    print(y)
+    # print(y)
     # print("start rule doing")
-    # a = Rule("[RSI(14)]<[40]", x)
-    # b = Rule("[Close] < [Open]", x)
-    # c = Rule("[High] < [SMA(10) * 0.99]", x)
 
-    # rs = RuleSet("Testing")
-    # rs.add(a)
-    # rs.add(b)
-    # rs.add(c)
+    pattern = RuleSet("slosto_pattern")
+    a = Rule("[RSI(14)]<[40]")
+    b = Rule("[Close] < [Open]")
+    c = Rule("[High] < [SMA(10) * 0.99]")
+    pattern.add(a)
+    pattern.add(b)
+    pattern.add(c)
+
+    confirmation = RuleSet("slosto_confirmation")
+    d = Rule("[SloSto(14)] > [20]")
+    e = Rule("[Close] > [EMA(4)]")
+    confirmation.add(d)
+    confirmation.add(e)
+
+    setup = Setup(ticker, {"primer": pattern, "confirmation": confirmation})
+
+    # print(x.history().head())
 
     # rs.process()
     # x = Rule("[Close] > [SMA(20)]", x)

@@ -32,7 +32,7 @@ class Calc:
     def equal_to(self, v1, v2):
         return v1 == v2
 
-    def not_equal_two(self, v1, v2):
+    def not_equal_to(self, v1, v2):
         return v1 != v2
 
     def add(self, v1, v2):
@@ -54,7 +54,7 @@ class Calc:
             "<": self.less_than,
             "<=": self.less_than_or_equal,
             "==": self.equal_to,
-            "!=": self.not_equal_two,
+            "!=": self.not_equal_to,
             "+": self.add,
             "-": self.subtract,
             "*": self.multiply,

@@ -1,6 +1,7 @@
 import pandas as pd
 from .parser import RuleParser
 from .calc import Calc
+from stockbox.common.indicator import IndicatorFactory
 
 
 class Rule:
@@ -15,14 +16,20 @@ class Rule:
     Rule then performs a calculation based on the statement and returns
     a boolean based on the statement's truthiness
 
+    # ! Note ---
+    Ticker is option because RuleSet.process() will add the ticker obj
+    from Setup() when it runs. It's still in the init() for external
+    testing, it may be removed as the application develops
     """
 
-    def __init__(self, statement, df=0):
+    def __init__(self, statement, Ticker=None):
         self.statement = statement
         self.rule = RuleParser(statement).process()
-        self.df = df
-        print(f"rule: {self.rule}")
-        print(f"test: ", self.rule["focus"]["key"])
+        if Ticker:
+            self.Ticker = Ticker
+            self.df = Ticker.history()
+        # print(f"rule: {self.rule}")
+        # print(f"test: ", self.rule["focus"]["key"])
 
     def process(self):
         """[summary]
@@ -69,10 +76,33 @@ class Rule:
             [type]: [description]
         """
         # column in the dataframe
-        col = self.rule[rulekey]["key"]
+        col = self.validate_indicator_column(self.rule[rulekey]["key"])
         # days back from index (0-indexed)
         fi = self.rule[rulekey]["from_index"]
         return self.df.at[int(fi), col]
+
+    def validate_indicator_column(self, key):
+        """check if the column name is present in the dataframe,
+        otherwise, sideload it to the Ticker object
+
+        Args:
+            key (str): requested column name
+
+        Returns:
+            str: provided column name
+        """
+        if key not in self.df.columns:
+            self.sideload_indicator(key)
+        return key
+
+    def sideload_indicator(self, key):
+        """add indicator to the ticket object, and update the Rule df
+
+        Args:
+            key (str): df column name
+        """
+        self.Ticker.add_indicator(key)
+        self.df = self.Ticker.history()
 
     def getextension(self):
         """
@@ -103,3 +133,7 @@ class Rule:
 
     def extension_exists(self):
         return "extension" in self.rule["comparison"].keys()
+
+    def set_ticker(self, Ticker):
+        self.Ticker = Ticker
+        self.df = Ticker.history()
