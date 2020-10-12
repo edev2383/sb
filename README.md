@@ -58,6 +58,13 @@ Other examples of valid statements:
 
 > "[Close] < [SMA(10) * 1.02]"
 
+### [update] Rules
+Rules can now use more complex verbiage to search indexes days in the past:
+```python
+Rule("[yesterday's Close] < [two days ago High]", Ticker)
+```
+It's in the testing phase, so it only goes back twenty days max, will expand this as needed
+
 
 ## RuleSets
 RuleSets are a collection of rules, which are used to determine a Setup, i.e., a particular configuration pattern on the stock chart.
