@@ -17,7 +17,7 @@ class Rule:
     a boolean based on the statement's truthiness
 
     # ! Note ---
-    Ticker is option because RuleSet.process() will add the ticker obj
+    Ticker is optional because RuleSet.process() will add the ticker obj
     from Setup() when it runs. It's still in the init() for external
     testing, it may be removed as the application develops
     """

@@ -27,6 +27,8 @@ class Focus(StatementComponent):
 
     re_simple = r"^[a-zA-Z]+$"
     re_range = r"(.*)\(([0-9]+)\)"
+    re_range_keywords = r"(yesterday| day[s]? ago)"
+    re_range_days_ago = r"(.*?) day[s]? ago (.*)"
 
     def process(self):
         """regex check for range, return appropriately
@@ -43,7 +45,14 @@ class Focus(StatementComponent):
         return self.norange()
 
     def range_exists(self):
-        return re.match(self.re_range, self.component)
+        """[summary]
+
+        Returns:
+            [type]: [description]
+        """
+        return re.match(self.re_range, self.component) or re.match(
+            self.re_range_keywords, self.component
+        )
 
     def norange(self):
         return {"key": self.component, "from_index": 0}
@@ -60,6 +69,12 @@ class Focus(StatementComponent):
         Returns:
             dict:
         """
+
+        print("m0: ", match.group())
+        print("m1: ", match.group(1))
+
+        print("m2: ", match.group(2))
+        exit()
         if self.is_candlekey(match.group(1).strip()):
             return {
                 "key": match.group(1).strip(),

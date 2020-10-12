@@ -16,20 +16,31 @@ def run():
     # print("start rule doing")
 
     pattern = RuleSet("slosto_pattern")
-    a = Rule("[RSI(14)]<[40]")
-    b = Rule("[Close] < [Open]")
-    c = Rule("[High] < [SMA(10) * 0.99]")
-    pattern.add(a)
-    pattern.add(b)
-    pattern.add(c)
+    # a = Rule("[RSI(14)]<[40]")
+    # b = Rule("[Close] < [Open]")
+    # c = Rule("[High] < [SMA(10) * 0.99]")
+    # pattern.add(a)
+    # pattern.add(b)
+    # pattern.add(c)
 
-    confirmation = RuleSet("slosto_confirmation")
-    d = Rule("[SloSto(14)] > [20]")
-    e = Rule("[Close] > [EMA(4)]")
-    confirmation.add(d)
-    confirmation.add(e)
+    # confirmation = RuleSet("slosto_confirmation")
+    # d = Rule("[SloSto(14)] > [20]")
+    # e = Rule("[Close] > [EMA(4)]")
+    # confirmation.add(d)
+    # confirmation.add(e)
 
-    setup = Setup(ticker, {"primer": pattern, "confirmation": confirmation})
+    # patternexit = RuleSet("slosto_exit")
+    # f = Rule("[Close] < [yesterday Close]")
+    g = Rule("[RIS(14)] < [yesterday Close]", ticker)
+    g.process()
+    # patternexit.add(f)
+    # patternexit.add(g)
+
+    # setup = Setup(
+    #     ticker,
+    #   {"primer": pattern, "confirmation": confirmation, "exit": patternexit},
+    # )
+    # setup.process()
 
     # print(x.history().head())
 
