@@ -62,6 +62,13 @@ Other examples of valid statements:
 Rules can now use more complex verbiage to search indexes days in the past:
 ```python
 Rule("[yesterday's Close] < [two days ago High]", Ticker)
+
+# alternatively, to get a "candle key" value, i.e., High, Low, Open, Close, Volume from previous days, 
+# the user can use Close(3) as shorthand. This could be confusing since it's not in alignment with 
+# how indicators are typed, with the secondary value being their ranges/window, so this may be removed
+# or an undocumented shorthand 
+
+Rule("[Close(3)] < [Close(2)]", Ticker)
 ```
 It's in the testing phase, so it only goes back twenty days max, will expand this as needed
 
