@@ -77,9 +77,11 @@ It's in the testing phase, so it only goes back twenty days max, will expand thi
 
 
 ## RuleSet
-RuleSets are a collection of rules and actions that are called based on the Ticker.state value. RuleSets are defined as followed:
+RuleSets are a collection of rules and actions that are called based on the Ticker.state value. Sample RuleSet below w/ no docs:
 
 ```python
+from stockbox.core.rule import Rule, RuleSet
+from stockbox.core.setup import Setup
 
 # SimpleSetup
 pattern = RuleSet("standard", "test_setup_primer")
