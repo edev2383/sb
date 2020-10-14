@@ -76,9 +76,34 @@ Rule("[Close(3)] < [Close(2)]", Ticker)
 It's in the testing phase, so it only goes back twenty days max, will expand this as needed
 
 
-## RuleSets
-RuleSets are a collection of rules, which are used to determine a Setup, i.e., a particular configuration pattern on the stock chart.
+## RuleSet
+RuleSets are a collection of rules and actions that are called based on the Ticker.state value. RuleSets are defined as followed:
 
+```python
+
+# SimpleSetup
+pattern = RuleSet("standard", "test_setup_primer")
+pattern.add(Rule("[Close] > [yesterday's Close]"))
+pattern.add(Rule("[SMA(10)] > [SMA(50)]"))
+
+pattern.define_action("action", Action=Prime())
+
+confirmation = RuleSet("primed", "test_setup_conf")
+confirmation.add(Rule("[Close] > [yesterday High]"))
+
+confirmation.define_action("action", Action=Buy())
+
+setup_exit = RuleSet("held", "test_setup_exit")
+setup_exit.add(Rule("[Close] < [yesterday Low]"))
+setup_exit.add(Rule("[yesterday Close] < [two days ago Low]"))
+
+setup_exit.define_action("action", Action=Sell())
+
+SimpleSetup = Setup([pattern, confirmation])
+```
+
+
+## Setup
 > More docs to come
 
 Rules (note for later):
