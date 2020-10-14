@@ -8,9 +8,12 @@ __The docs will be chaotic until the backtesting is complete__
 - Indicators
 - Rules
 - RuleSets
-- Watchlist
+- Setup
+- Backtest
 - Action (Buy/Sell)
-- Risk Models
+- ActiveScan
+ - Watchlist
+ - Risk Models
 
 ## Ticker
 Behaves similar to a simplified YahooFinance python package ([yF](https://pypi.org/project/yfinance/))
