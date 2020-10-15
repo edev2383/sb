@@ -1,16 +1,19 @@
 # Stockbox
 _Stockbox is an equity testing suite that scrapes yahoo finance for ticker data. Returns a dataframe and calculates indicators. Backtesting will allow for 5-10 yrs of equity pattern recognition and allow the user to test complex stock position setups._
 
-__The docs will be chaotic until the backtesting is complete__
+_Docs are incomplete_
 
 # Table of Contents
 - Ticker
 - Indicators
 - Rules
 - RuleSets
-- Watchlist
+- Setup
+- Backtest
 - Action (Buy/Sell)
-- Risk Models
+- ActiveScan
+  - Watchlist
+  - Risk Models
 
 ## Ticker
 Behaves similar to a simplified YahooFinance python package ([yF](https://pypi.org/project/yfinance/))
@@ -58,9 +61,52 @@ Other examples of valid statements:
 
 > "[Close] < [SMA(10) * 1.02]"
 
+### [update] Rules
+Rules can now use more complex verbiage to search indexes days in the past:
+```python
+Rule("[yesterday's Close] < [two days ago High]", Ticker)
 
-## RuleSets
-RuleSets are a collection of rules, which are used to determine a Setup, i.e., a particular configuration pattern on the stock chart.
+# alternatively, to get a "candle key" value, i.e., High, Low, Open, Close, Volume from previous days, 
+# the user can use Close(3) as shorthand. This could be confusing since it's not in alignment with 
+# how indicators are typed, with the secondary value being their ranges/window, so this may be removed
+# or an undocumented shorthand 
+
+Rule("[Close(3)] < [Close(2)]", Ticker)
+```
+It's in the testing phase, so it only goes back twenty days max, will expand this as needed
+
+
+## RuleSet
+RuleSets are a collection of rules and actions that are called based on the Ticker.state value. Sample RuleSet below w/ no docs:
+
+```python
+from stockbox.core.rule import Rule, RuleSet
+from stockbox.core.setup import Setup
+
+# SimpleSetup
+pattern = RuleSet("standard", "test_setup_primer")
+pattern.add(Rule("[Close] > [yesterday's Close]"))
+pattern.add(Rule("[SMA(10)] > [SMA(50)]"))
+
+pattern.define_action("action", Action=Prime())
+
+confirmation = RuleSet("primed", "test_setup_conf")
+confirmation.add(Rule("[Close] > [yesterday High]"))
+
+confirmation.define_action("action", Action=Buy())
+
+setup_exit = RuleSet("held", "test_setup_exit")
+setup_exit.add(Rule("[Close] < [yesterday Low]"))
+setup_exit.add(Rule("[yesterday Close] < [two days ago Low]"))
+
+setup_exit.define_action("action", Action=Sell())
+
+SimpleSetup = Setup([pattern, confirmation])
+```
+
+
+## Setup
+Setup takes a list of RuleSets as the only required argument. There are additional arguments that can be changed, but are set with default values when a Setup class initializes.
 
 > More docs to come
 
