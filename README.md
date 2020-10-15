@@ -106,6 +106,8 @@ SimpleSetup = Setup([pattern, confirmation])
 
 
 ## Setup
+Setup takes a list of RuleSets as the only required argument. There are additional arguments that can be changed, but are set with default values when a Setup class initializes.
+
 > More docs to come
 
 Rules (note for later):
