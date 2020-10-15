@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"editor.fontFamily": "Fira Code",
+		"editor.fontLigatures": true,
+		"editor.fontSize": 11,
+		"editor.renderWhitespace": "all",
+		"python.formatting.provider": "black",
+		"workbench.colorTheme": "Community Material Theme High Contrast"
+	}
+}

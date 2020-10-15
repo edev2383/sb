@@ -1,7 +1,5 @@
-import pandas as pd
 from .parser import RuleParser
 from .calc import Calc
-from stockbox.common.indicator import IndicatorFactory
 
 
 class Rule:
@@ -22,24 +20,36 @@ class Rule:
     testing, it may be removed as the application develops
     """
 
+    # string rule statement to parse
+    statement: str
+    # dict of values breakdown
+    rule: dict
+    # active dataframe
+    window = None
+
     def __init__(self, statement, Ticker=None):
         self.statement = statement
         self.rule = RuleParser(statement).process()
         if Ticker:
             self.Ticker = Ticker
-            self.df = Ticker.history()
-        # print(f"rule: {self.rule}")
-        # print(f"test: ", self.rule["focus"]["key"])
+        # print("rule: ", self.rule)
+        # print("focus key: ", self.rule["focus"]["key"])
 
-    def process(self):
+    def process(self, window=None):
         """[summary]
 
         Returns:
-            boolean: Calc takes in values and operator and befores the
-                     operation, returning a boolean
+            boolean: Calc takes in values and operator and performs the
+                     operation, and in this case returning a boolean
         """
+        if window is None:
+            self.window = self.Ticker.history()
+        else:
+            self.window = window
         focus = self.getfocus()
         comp = self.getcomp()
+        if not focus or not comp:
+            return False
         return Calc(focus, self.rule["operator"], comp).calc()
 
     def getfocus(self):
@@ -63,6 +73,9 @@ class Rule:
         else:
             # otherwise, perform the calculation
             spotvalue = self.getvalue("comparison")
+            # break to False if value not found
+            if not spotvalue:
+                return False
             extension = self.getextension()
             return self.calculate_extension(spotvalue, extension)
 
@@ -73,13 +86,16 @@ class Rule:
             rulekey (str): "comparison" or "focus" keys
 
         Returns:
-            [type]: [description]
+            mixed|float|int: value at given loc of the active window
         """
-        # column in the dataframe
+        # column exists in the dataframe
         col = self.validate_indicator_column(self.rule[rulekey]["key"])
         # days back from index (0-indexed)
         fi = self.rule[rulekey]["from_index"]
-        return self.df.at[int(fi), col]
+        # return False if the requested from_index is beyond the window
+        if int(fi) not in self.window.index:
+            return False
+        return self.window.at[int(fi), col]
 
     def validate_indicator_column(self, key):
         """check if the column name is present in the dataframe,
@@ -91,7 +107,7 @@ class Rule:
         Returns:
             str: provided column name
         """
-        if key not in self.df.columns:
+        if key not in self.window.columns:
             self.sideload_indicator(key)
         return key
 
@@ -102,7 +118,13 @@ class Rule:
             key (str): df column name
         """
         self.Ticker.add_indicator(key)
-        self.df = self.Ticker.history()
+        self.reassign_window()
+
+    def reassign_window(self):
+        """Update the window values to include the same portion of the
+        overall Ticker.history() dataframe, with the added indicator
+        """
+        self.window = self.Ticker.history().tail(len(self.window))
 
     def getextension(self):
         """
@@ -136,4 +158,3 @@ class Rule:
 
     def set_ticker(self, Ticker):
         self.Ticker = Ticker
-        self.df = Ticker.history()

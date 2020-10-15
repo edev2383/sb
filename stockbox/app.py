@@ -2,6 +2,7 @@ from stockbox.core.rule import Rule, RuleSet
 from stockbox.common.indicator import IndicatorFactory
 from stockbox.core.ticker import Ticker
 from stockbox.core.setup import Setup
+import re
 
 # from stockbox.ticker import Ticker
 
@@ -9,13 +10,14 @@ from stockbox.core.setup import Setup
 def run():
 
     ticker = Ticker("Goog")
+    # # ticker = []
 
-    # y = IndicatorFactory.create("SMA(18)", x)
+    # # y = IndicatorFactory.create("SMA(18)", x)
 
-    # print(y)
-    # print("start rule doing")
+    # # print(y)
+    # # print("start rule doing")
 
-    pattern = RuleSet("slosto_pattern")
+    # pattern = RuleSet("standard", "slosto_pattern")
     # a = Rule("[RSI(14)]<[40]")
     # b = Rule("[Close] < [Open]")
     # c = Rule("[High] < [SMA(10) * 0.99]")
@@ -23,23 +25,23 @@ def run():
     # pattern.add(b)
     # pattern.add(c)
 
-    # confirmation = RuleSet("slosto_confirmation")
+    # confirmation = RuleSet("standard", "slosto_confirmation")
     # d = Rule("[SloSto(14)] > [20]")
     # e = Rule("[Close] > [EMA(4)]")
     # confirmation.add(d)
     # confirmation.add(e)
 
-    # patternexit = RuleSet("slosto_exit")
+    # patternexit = RuleSet("held", "slosto_exit")
     # f = Rule("[Close] < [yesterday Close]")
-    g = Rule("[RIS(14)] < [yesterday Close]", ticker)
-    g.process()
+    g = Rule("[two day ago Close] < [two day ago RSI(14)]")
+
+    # g = Rule("[yesterday's Close] < [yesterday Close]", ticker)
+    # g = Rule("[two day ago RIS(14)] < [yesterday Close]", ticker)
+    # g.process()
     # patternexit.add(f)
     # patternexit.add(g)
 
-    # setup = Setup(
-    #     ticker,
-    #   {"primer": pattern, "confirmation": confirmation, "exit": patternexit},
-    # )
+    # setup = Setup([pattern, confirmation, patternexit])
     # setup.process()
 
     # print(x.history().head())

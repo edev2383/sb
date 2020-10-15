@@ -13,6 +13,7 @@ class Calc:
         self.v1 = float(value_one)
         self.operator = operator
         self.v2 = float(value_two)
+        # print(f"v1: {value_one}, op: {operator}, v2: {value_two}")
 
     def calc(self):
         return self.switch_op()

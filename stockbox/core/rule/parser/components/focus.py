@@ -1,5 +1,6 @@
 import re
 from .statement_component import StatementComponent
+from .ComplexRangeRe import ComplexRangeRe
 
 
 class Focus(StatementComponent):
@@ -27,8 +28,7 @@ class Focus(StatementComponent):
 
     re_simple = r"^[a-zA-Z]+$"
     re_range = r"(.*)\(([0-9]+)\)"
-    re_range_keywords = r"(yesterday| day[s]? ago)"
-    re_range_days_ago = r"(.*?) day[s]? ago (.*)"
+    re_complex_range = r"(yesterday| day[s]? ago)"  # use re.search
 
     def process(self):
         """regex check for range, return appropriately
@@ -50,8 +50,8 @@ class Focus(StatementComponent):
         Returns:
             [type]: [description]
         """
-        return re.match(self.re_range, self.component) or re.match(
-            self.re_range_keywords, self.component
+        return re.match(self.re_range, self.component) or re.search(
+            self.re_complex_range, self.component
         )
 
     def norange(self):
@@ -69,19 +69,7 @@ class Focus(StatementComponent):
         Returns:
             dict:
         """
-
-        print("m0: ", match.group())
-        print("m1: ", match.group(1))
-
-        print("m2: ", match.group(2))
-        exit()
-        if self.is_candlekey(match.group(1).strip()):
-            return {
-                "key": match.group(1).strip(),
-                "from_index": match.group(2).strip(),
-            }
-        # assume it's an indicator and return it as no range
-        return self.norange()
+        return ComplexRangeRe(self.component).process()
 
     def validate_norange(self):
         """regex to confirm the value is a string only"""

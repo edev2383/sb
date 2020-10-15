@@ -23,6 +23,7 @@ class Ticker:
 
     # ! NEW @ 10/11/2020
     __state: str = "standard"  # "primed", "held"
+    valid_state: list = ["standard", "primed", "held"]
 
     def __init__(self, symbol: str, range: str = "1y"):
         self.symbol = symbol.upper()
@@ -66,4 +67,10 @@ class Ticker:
 
     @state.setter
     def state(self, state: str):
-        self.__state = state
+        self.__state = self.validate_state(state)
+
+    def validate_state(self, state):
+        if state not in self.valid_state:
+            print(f"Error: Invalid state received from Setup: {state}")
+            print(" - valid state values: ", self.valid_state)
+        return state

@@ -2,6 +2,9 @@
 .vscode/
 .idea/
 
+#vscode workspace 
+.code-workspace 
+
 # Vagrant
 .vagrant/
 
