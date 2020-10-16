@@ -108,6 +108,10 @@ SimpleSetup = Setup([pattern, confirmation])
 ## Setup
 Setup takes a list of RuleSets as the only required argument. There are additional arguments that can be changed, but are set with default values when a Setup class initializes.
 
+
+## Backtest
+The Backtest class iterates through the dataframe, checking each index for the various _RuleSets_ via the _Setup_ class.
+
 > More docs to come
 
 Rules (note for later):
