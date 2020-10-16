@@ -7,9 +7,20 @@
 	"settings": {
 		"editor.fontFamily": "Fira Code",
 		"editor.fontLigatures": true,
-		"editor.fontSize": 11,
+		"editor.fontSize": 10,
 		"editor.renderWhitespace": "all",
 		"python.formatting.provider": "black",
+		"editor.tokenColorCustomizations": {
+			"comments": "#35d0ff",
+			"textMateRules": [
+				{
+					"scope": "string.quoted.docstring.multi.python",
+					"settings": {
+						"foreground": "#35d0ff" //change to your preference
+					}
+				}
+			]
+		},
 		"workbench.colorTheme": "Community Material Theme High Contrast"
 	}
 }

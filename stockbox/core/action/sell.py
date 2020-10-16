@@ -7,4 +7,4 @@ class Sell(Action):
 
     def process(self):
         self.set_tickerstate("standard")
-        print("were buying here...", self.name)
+        print("were selling here...", self.name)

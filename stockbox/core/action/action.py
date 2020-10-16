@@ -1,6 +1,9 @@
 class Action:
 
     name: str
+    # the data from the day that triggered the action
+    window: dict
+    # the Setup class to alter
     Setup = None
 
     def __init__(self, name):
@@ -8,6 +11,9 @@ class Action:
 
     def process(self):
         pass
+
+    def set_window(self, window):
+        self.window = window
 
     def set_setup(self, Setup):
         self.Setup = Setup

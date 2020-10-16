@@ -44,7 +44,7 @@ def text2int(value):
         "nineteen",
         "twenty",
     ]
-    return units.index(value)
+    return units.index(value.lower())
 
 
 def is_int(val):

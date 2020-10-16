@@ -38,8 +38,8 @@ class RuleSet:
     def alter_setup_prop(self, prop, value):
         self.Setup.alterprop(prop, value)
 
-    def alter_setup_action(self, Action):
-        self.Setup.take_action(Action)
+    def alter_setup_action(self, Action, window):
+        self.Setup.take_action(Action, window)
 
     def define_action(self, action: str, prop=None, value=None, Action=None):
         """define an action to activate when the RuleSet returns true
@@ -64,19 +64,19 @@ class RuleSet:
                 exit()
             self.actions["action"].append(Action)
 
-    def run_actions(self):
+    def run_actions(self, window):
         if self.actions["alter"]:
             self.run_setup_alters()
         if self.actions["action"]:
-            self.run_setup_actions()
+            self.run_setup_actions(window)
 
     def run_setup_alters(self):
         for alter in self.actions["alter"]:
             self.alter_setup_prop(alter["prop"], alter["value"])
 
-    def run_setup_actions(self):
+    def run_setup_actions(self, window):
         for action in self.actions["action"]:
-            self.alter_setup_action(action)
+            self.alter_setup_action(action, window)
 
     def get_tickerstate(self):
         return self.tickerstate
