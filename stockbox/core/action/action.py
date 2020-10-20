@@ -5,6 +5,7 @@ class Action:
     window: dict
     # the Setup class to alter
     Setup = None
+    Backtest = None
 
     def __init__(self, name):
         self.name = name
@@ -17,6 +18,9 @@ class Action:
 
     def set_setup(self, Setup):
         self.Setup = Setup
+
+    def set_backtest(self, Backtest):
+        self.Backtest = Backtest
 
     def set_tickerstate(self, state):
         self.Setup.set_tickerstate(state)

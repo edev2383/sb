@@ -29,6 +29,7 @@ class RuleSet:
         return True
 
     def inject_ticker_to_rules(self, Ticker):
+        self.Ticker = Ticker
         for rule in self.rules:
             rule.set_ticker(Ticker)
 
@@ -65,9 +66,8 @@ class RuleSet:
             self.actions["action"].append(Action)
 
     def run_actions(self, window):
-        if self.actions["alter"]:
+        if self.tickerstate == self.Ticker.state:
             self.run_setup_alters()
-        if self.actions["action"]:
             self.run_setup_actions(window)
 
     def run_setup_alters(self):

@@ -58,7 +58,16 @@ class Rule:
         Returns:
             float: From the parsed dict["focus"] value
         """
+        if self.rule["operator"] == "x":
+            return self.get_crossesover_focus()
         return self.getvalue("focus")
+
+    def get_crossesover_focus(self):
+        index_value = self.getvalue("focus")
+        current_index = self.rule["focus"]["from_index"]
+        self.rule["focus"]["from_index"] = current_index + 1
+        previous_index_value = self.getvalue("focus")
+        return {"prev": previous_index_value, "curr": index_value}
 
     def getcomp(self):
         """Calculate and return the comparison portion of the RuleParse

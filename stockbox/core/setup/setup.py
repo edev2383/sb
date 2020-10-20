@@ -2,18 +2,7 @@ from stockbox.common.position import PositionController
 
 
 class Setup:
-    """A set of rules for creating, maintaining, and closing a position
-    name: str
-
-    primer: RuleSet
-    confirmation: RuleSet
-    conf_failure: RuleSet
-    abort: RuleSet
-    sell: RuleSet
-
-    is_primed: boolean
-
-    """
+    """A set of rules for creating, maintaining, and closing a position"""
 
     Ticker = None
     Backtest = None
@@ -24,6 +13,10 @@ class Setup:
     # backtest or activescan
     mode: str = "backtest"
 
+    prime_date = None
+
+    __name: str = "No name given"
+
     def __init__(self, Patterns, Ticker=None, **kwargs):
 
         self.Patterns = Patterns
@@ -31,13 +24,17 @@ class Setup:
         # Ticker set in init only for testing purposes, will remove
         if Ticker:
             self.Ticker = Ticker
-        print("initing setup = = =======================================")
-        self.position_controller = PositionController(kwargs)
+        self.position_controller = self.create_position_controller(
+            PositionController(kwargs)
+        )
 
     def set_backtest(self, Backtest):
         self.Backtest = Backtest
         self.position_controller.set_backtest(Backtest)
-        self.position_controller.set_riskprofile(40.15)
+
+    def create_position_controller(self, PositionController):
+        PositionController.Setup = self
+        return PositionController
 
     def get_patterns_to_process(self):
         """Filter self.Patterns based on Ticker.state value
@@ -80,7 +77,6 @@ class Setup:
             pattern.inject_ticker_to_rules(self.Ticker)
         return Patterns
 
-    # this is for testing, remove once sb_backtest is fully operational
     def process(self, window=None):
         """loop through valid RuleSet objects to process their rules
         if all rules are true call RuleSet.run_actions()
@@ -89,18 +85,20 @@ class Setup:
             window (dataframe, optional): passed dataframe to process
             if None, RuleSet will process the provided ticker
         """
-        exit()
 
-        self.set_riskprofile()
-        patterns = self.get_patterns_to_process()
-        for ruleset in patterns:
+        for ruleset in self.get_patterns_to_process():
             value = ruleset.process(window)
             if value:
+                print(" ")
                 print("state: ", ruleset.tickerstate)
                 print("name: ", ruleset.name)
-                print("----------------------------")
+                print("---[ WINDOW ]---------------")
                 print("date: ", window.iloc[0])
+                print("----------------------------")
+                print(" ")
                 ruleset.run_actions(window.iloc[0])
+            else:
+                self.run_on_ruleset_failure(window.iloc[0])
 
     def alterprop(self, prop, value):
         if prop == "tickerstate":
@@ -109,11 +107,37 @@ class Setup:
             setattr(self, prop, value)
 
     def take_action(self, Action, window):
-        Action.set_setup(self)
-        self.Backtest.take_action(Action, window)
+        Action.Setup = self
+        Action.Backtest = self
+        Action.window = window
+        Action.process()
 
     def set_tickerstate(self, state):
         self.Ticker.state = state
+
+    def open_position(self, window):
+        self.position_controller.open(window)
+
+    def close_position(self, window):
+        self.position_controller.close_position(window)
+
+    def run_on_ruleset_failure(self, window):
+        self.position_controller.monitor_state(window)
+
+    def reset(self):
+        self.set_tickerstate("standard")
+        self.position_controller.prime_date = None
+
+    @property
+    def name(self):
+        return self.__name
+
+    @name.setter
+    def name(self, name):
+        self.__name = name
+
+    def set_primedate(self, date):
+        self.position_controller.prime_date = date
 
 
 #

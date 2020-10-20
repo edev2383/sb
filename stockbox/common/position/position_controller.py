@@ -1,3 +1,8 @@
+import math
+import datetime
+from .position import Position
+
+
 class PositionController:
 
     config: dict
@@ -10,7 +15,8 @@ class PositionController:
     use_trailing_stop: bool
 
     # percent or dollar amount for trailing stop
-    trailing_stop: float
+    trailing_stop_percent: float
+    trailing_stop_dollar: float
 
     # percent gain or dollar amount for target exit
     target: float
@@ -45,45 +51,54 @@ class PositionController:
 
     sharecount: int = 0
 
+    position_config: dict = {}
+
+    active: bool = False
+    Position = None
     Backtest = None
+
+    length_valid_prime = None
+
+    __prime_date = None
 
     def __init__(self, config):
         prop_defaults = {
-            "mode": "backtest",
-            "total_risk_percent": 0.02,
-            "total_risk_dollar": None,
+            "total_risk_percent": 0.02,  # done
+            "total_risk_dollar": None,  # done
             "use_trailing_stop": False,
-            "trailing_stop": None,
+            "trailing_stop_percent": None,
+            "trailing_stop_dollar": None,
             "target": None,
             "sell_half": False,
             "sell_half_target": None,
             "entry_percent_from_conf": 0.02,
             "entry_dollar_from_conf": None,
-            "stop_loss_percent": 0.10,
-            "stop_loss_dollar": None,
+            "stop_loss_percent": 0.10,  # done
+            "stop_loss_dollar": None,  # done
             "valid_duration": None,
-            "max_position_shares": None,
-            "max_position_dollars": None,
+            "max_position_shares": None,  # done
+            "max_position_dollars": None,  # done
+            "length_valid_prime": None,
         }
 
         for (prop, default) in prop_defaults.items():
             setattr(self, prop, config.get(prop, default))
-        print("testing --- : ", self.stop_loss_dollar, id(self))
+        # print("testing --- : ", self.stop_loss_dollar, id(self))
 
     def set_backtest(self, Backtest):
         self.Backtest = Backtest
 
     def set_riskprofile(self, share_price: float):
-        self.stoploss = self.set_stoploss(share_price)
-        self.sharecount = self.set_sharecount(share_price)
-        print("self.stoploss: ", self.stoploss)
+        self.position_config["stop_loss"] = self.set_stoploss(share_price)
+        self.position_config["sharecount"] = self.set_sharecount(share_price)
+        self.position_config["bank_start"] = self.Backtest.bank
 
     def set_stoploss(self, share_price: float):
         """Setting position stop loss, the threshold at which the posit-
         ion would be closed if the price action fell below
 
         if both stop_loss_* values are set, the higher is returned, rep-
-        resenting a smaller risk window.
+        resenting a smaller risk window, i.e. closer to entry.
 
         Args:
             share_price (float):
@@ -96,7 +111,7 @@ class PositionController:
             loss.append(share_price * (1 - self.stop_loss_percent))
         if self.stop_loss_dollar:
             loss.append(share_price - self.stop_loss_dollar)
-        return max(loss)
+        return round(max(loss), 2)
 
     def set_sharecount(self, share_price: float):
         """Determine share count by factoring stoploss value and risk
@@ -108,22 +123,95 @@ class PositionController:
         Returns:
             int: number of shares
         """
-        total_risk = self.set_totalrisk()
-        self.sharecount = total_risk / (share_price - self.stoploss)
-        print("sharecount: ", self.sharecount)
+        num_of_shares = [self.max_position_shares]
+        num_of_shares.append(
+            self.set_totalrisk()
+            / (share_price - self.position_config["stop_loss"])
+        )
+        print("num of shares: ", num_of_shares)
+        print("total risk :", self.set_totalrisk())
+        print("config: ", self.position_config)
+        return self.validate_shares(
+            math.floor(min([i for i in num_of_shares if i])), share_price
+        )
+
+    def modify_stoploss(self, sharecount):
+        x = 1
+
+    def validate_shares(self, share_count, share_price):
+        cost = share_price * share_count
+        if cost > self.Backtest.bank:
+            modified_shares = math.floor(self.Backtest.bank / share_price)
+            print("mod shares: ", modified_shares)
+            self.modify_stoploss(modified_shares)
+            return modified_shares
+        else:
+            return share_count
 
     def set_totalrisk(self):
-        """Total dollar risk, by total_risk_* values. If both are set,
-        take the lesser value
+        """Total dollar risk, by total_risk_* values and max_position_$
 
         Returns:
             float: total dollar risk
         """
-        bank = self.Backtest.bank
-        risk = []
-        if self.total_risk_percent is not None:
-            risk.append(bank * self.total_risk_percent)
-        if self.total_risk_dollar is not None:
-            risk.append(self.total_risk_dollar)
-        print("risk: ", risk)
-        return min(risk)
+        risk = [
+            self.Backtest.bank * self.total_risk_percent,
+            self.total_risk_dollar,
+            self.max_position_dollars,
+        ]
+        return min([i for i in risk if i])
+
+    def open(self, window):
+        self.set_riskprofile(window["Close"])
+        self.Position = self.create_position(
+            Position(self.position_config), window
+        )
+        self.active = True
+
+    def create_position(self, Position, window):
+        Position.open(window)
+        Position.Controller = self
+        Position.prime_date = self.__prime_date
+        return Position
+
+    def close_position(self, window):
+        self.Position.close(window)
+
+    def is_active(self):
+        return self.active
+
+    def close(self):
+        self.Backtest.update_pnl(self.Position.pnl())
+        self.active = False
+        self.Position = None
+        self.Setup.reset()
+
+    def monitor_state(self, window):
+        if self.active:
+            self.Position.update(window)
+        else:
+            self.monitor_inactive_state(window)
+
+    def monitor_inactive_state(self, window):
+        self.prime_valid(window)
+
+    def prime_valid(self, window):
+        if self.length_valid_prime is not None:
+            if self.__prime_date is not None:
+                delta_t = window["Date"] - self.__prime_date
+                if delta_t.days > self.length_valid_prime:
+                    print(" ")
+                    print(" *********** RESET CALLED ************")
+                    print("TYPE: length_valid_prime")
+                    print(window)
+                    print(" _________ END RESET _________ ")
+                    print(" ")
+                    self.Setup.reset()
+
+    @property
+    def prime_date(self):
+        return self.__prime_date
+
+    @prime_date.setter
+    def prime_date(self, date):
+        self.__prime_date = date

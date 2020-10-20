@@ -1,4 +1,5 @@
 from .yf import YahooFinance
+from .bg import BG
 from stockbox.common.range import Range
 
 
@@ -35,3 +36,6 @@ class Scraper:
                 "interval": interval,
             }
         )
+
+    def current(self):
+        BG().request_current()

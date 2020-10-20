@@ -19,8 +19,6 @@ class SlowStochastic(Indicator):
         low_min = df["Low"].rolling(window=self.range).min()
         high_max = df["High"].rolling(window=self.range).max()
 
-        df[self.name] = 100 * (
-            (df["Adj_Close"] - low_min) / (high_max - low_min)
-        )
+        df[self.name] = 100 * ((df["Close"] - low_min) / (high_max - low_min))
         df[self.name] = df[self.name].rolling(window=3).mean()
         return df[::-1].fillna(0)

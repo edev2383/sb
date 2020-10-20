@@ -9,7 +9,7 @@ info
 
 
 class Create:
-    default_range: str = "1y"
+    default_range: str = "5y"
     symbol: str
     stock_id: int
 

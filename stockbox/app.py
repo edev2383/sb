@@ -2,6 +2,7 @@ from stockbox.core.rule import Rule, RuleSet
 from stockbox.common.indicator import IndicatorFactory
 from stockbox.core.ticker import Ticker
 from stockbox.core.setup import Setup
+from stockbox.common.scraper import Scraper
 import re
 
 # from stockbox.ticker import Ticker
@@ -9,7 +10,10 @@ import re
 
 def run():
 
-    ticker = Ticker("Goog")
+    Scraper().current()
+    # ticker = Ticker("GLW")
+    # ticker.add_indicator("RSI(14)")
+    # print(ticker.history().head())
     # # ticker = []
 
     # # y = IndicatorFactory.create("SMA(18)", x)
@@ -33,7 +37,9 @@ def run():
 
     # patternexit = RuleSet("held", "slosto_exit")
     # f = Rule("[Close] < [yesterday Close]")
-    g = Rule("[two day ago Close] < [two day ago RSI(14)]")
+    # g = Rule("[Low] x [SMA(10)]", ticker).process()
+    # print("g value: ", g)
+    # print(ticker.history().head())
 
     # g = Rule("[yesterday's Close] < [yesterday Close]", ticker)
     # g = Rule("[two day ago RIS(14)] < [yesterday Close]", ticker)

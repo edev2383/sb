@@ -8,15 +8,7 @@ class BreakStatement:
 
     re_bracket = r"(\[(.*)\])\s?(.+)\s?(\[(.*)\])"
 
-    valid_operators: list = [
-        ">",
-        "==",
-        "!=",
-        "<",
-        "<=",
-        ">=",
-        "is",
-    ]
+    valid_operators: list = [">", "==", "!=", "<", "<=", ">=", "is", "x"]
 
     def __init__(self, statement: str):
         self.statement = statement

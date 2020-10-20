@@ -7,4 +7,4 @@ class Prime(Action):
 
     def process(self):
         self.set_tickerstate("primed")
-        print("were buying here...", self.name, self.window)
+        self.Setup.set_primedate(self.window["Date"])

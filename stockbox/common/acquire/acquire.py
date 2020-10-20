@@ -50,7 +50,7 @@ class Acquire:
             c = Create(self.symbol)
             c.set_stock_id(self.symbol)
             c.insert_stock_data_model(self.symbol)
-            time.sleep(2)
+            time.sleep(5)
         return Update(
             self.get_stock_data_model(), self.symbol, self.stock_id, self.range
         ).process()

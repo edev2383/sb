@@ -7,4 +7,4 @@ class Buy(Action):
 
     def process(self):
         self.set_tickerstate("held")
-        print("were buying here...", self.name)
+        self.Setup.open_position(self.window)
