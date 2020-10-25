@@ -101,7 +101,7 @@ setup_exit.add(Rule("[yesterday Close] < [two days ago Low]"))
 
 setup_exit.define_action("action", Action=Sell())
 
-SimpleSetup = Setup([pattern, confirmation])
+SimpleSetup = Setup([pattern, confirmation, setup_exit])
 ```
 
 
