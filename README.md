@@ -110,16 +110,18 @@ Setup takes a list of RuleSets as the only required argument. There are addition
 
 
 ## Backtest
-The Backtest class iterates through the dataframe, ever-expanding the dataframe with each iteration, checking each new index for the various _RuleSets_ via the _Setup_ class. If a true scenerio triggers, Setup triggers the RuleSet to take the predefined action. A PositionController class within the Setup handles the Position logic, while the Position class handles internal math and stoploss checks. 
+The Backtest class iterates through the dataframe, ever-expanding the active 'window' with each iteration, checking each new index for the various _RuleSets_ via the _Setup_ class. If any Rule for an index triggers `False`, the index is short-circuited and backtest moves on to the next iteration. If all indexes are True for the Rule, Setup triggers the RuleSet to take the predefined action. A PositionController class within the Setup handles the Position logic, while the Position class handles internal math and stoploss checks. 
 
 The output below is from an equity backtest, using the above defined "SimpleSetup" over a 5yr period
 
 ```python
 
 def run():
-
     bt = Backtest(Ticker("XXXX", "5y"), SimpleSetup)
+    bt.bank = 10000
     bt.process()
+    
+run()
 
 #	    bank_end  bank_start date_enter  date_exit date_prime  days_held  pos_id  price_enter  price_exit  stop_loss  total_pnl  total_shares
 #	 0    9850.06    10000.00 2016-01-12 2016-01-14 2016-01-11        2.0  574656     2.390000    2.210000        0.0    -149.94         833.0
