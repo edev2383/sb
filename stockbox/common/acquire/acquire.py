@@ -12,6 +12,8 @@ from stockbox.common.model import (
     StockIndicator,
     StockIndicatorData,
 )
+from stockbox.common.scraper import Scraper
+from stockbox.common.range import Range
 
 
 class Acquire:
@@ -36,6 +38,10 @@ class Acquire:
         self.symbol = symbol.upper()
 
     def process(self):
+
+        return Scraper().history(self.symbol, self.range)
+
+    def db_process(self):
         """
         Return stock data from the StockData model. Update performs
         additional update checks to make sure the existing record is

@@ -32,7 +32,6 @@ class Rule:
         self.rule = RuleParser(statement).process()
         if Ticker:
             self.Ticker = Ticker
-        # print("rule: ", self.rule)
         # print("focus key: ", self.rule["focus"]["key"])
 
     def process(self, window=None):

@@ -32,12 +32,12 @@ class Ticker:
         self.set_default_indicators()
         # print("Indicators ] ------------------------------")
         # print(self.data)
-        print(f"- ------------------------------------------[End Ticker]-")
-        print(f" ")
+        print("- ------------------------------------------[End Ticker]-")
+        print(" ")
 
     def create_history(self):
-        print(f" ")
-        print(f"- ------------------------------------------[Begin Ticker]-")
+        print(" ")
+        print("- ------------------------------------------[Begin Ticker]-")
         print(f"- Ticker - create history {self.symbol} - {self.range}")
         return History(self.symbol, self.range)
 
@@ -45,7 +45,7 @@ class Ticker:
         return self.data
 
     def set_default_indicators(self):
-        print(f"- Ticker - appending default indicators")
+        print("- Ticker - appending default indicators")
         # self.data = IndicatorFactory.create("EMA(4)", self)
         # self.data = IndicatorFactory.create("SMA(10)", self)
         # self.data = IndicatorFactory.create("SMA(20)", self)

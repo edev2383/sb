@@ -1,4 +1,5 @@
 from stockbox.common.position import PositionController
+from stockbox.common.log import Log
 
 
 class Setup:
@@ -85,19 +86,24 @@ class Setup:
             window (dataframe, optional): passed dataframe to process
             if None, RuleSet will process the provided ticker
         """
-
         for ruleset in self.get_patterns_to_process():
             value = ruleset.process(window)
             if value:
-                print(" ")
-                print("state: ", ruleset.tickerstate)
-                print("name: ", ruleset.name)
-                print("---[ WINDOW ]---------------")
-                print("date: ", window.iloc[0])
-                print("----------------------------")
-                print(" ")
+                # print(" ")
+                # print("state: ", ruleset.tickerstate)
+                # print("name: ", ruleset.name)
+                # # print("---[ WINDOW ]---------------")
+                # print(window.at[0, "Date"])
+                # print("----------------------------")
+                # print(" ")
+                # dt = window.at[0, "Date"]
                 ruleset.run_actions(window.iloc[0])
             else:
+                # print("name: ", ruleset.name)
+                # # print("---[ WINDOW ]---------------")
+                # print(window.at[0, "Date"])
+                # print("----------------------------")
+                # print(" ")
                 self.run_on_ruleset_failure(window.iloc[0])
 
     def alterprop(self, prop, value):

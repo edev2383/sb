@@ -1,5 +1,6 @@
 # import stockbox.model as model
 import pandas as pd
+import datetime
 from stockbox.common.range import Range
 from stockbox.common.acquire import Acquire
 
@@ -30,7 +31,7 @@ class History:
 
     def __init__(self, symbol: str, range: str = "1y"):
         self.symbol = symbol.upper()
-        self.range = Range(range.lower()).generate_range()
+        self.range = range
 
     def load(self):
         # check Stock model for exists
@@ -44,4 +45,23 @@ class History:
         #
         #
         print(f" - History - calling Acquire - {self.symbol} - {self.range}")
-        return Acquire(self.symbol, self.range).process()
+        history = Acquire(self.symbol, self.range).process()
+        return self.format_history(history)
+
+    def format_history(self, df):
+        df = self.adddelta(df)
+        df = self.addpercent_d(df)
+        df = self.converttodatetime(df)
+        return df[::-1]
+
+    def adddelta(self, df):
+        df["Delta"] = round(df["Open"] - df["Adj Close"], 2)
+        return df
+
+    def addpercent_d(self, df):
+        df["% Delta"] = round(df["Delta"] / df["Open"], 2)
+        return df
+
+    def converttodatetime(self, df):
+        df["Date"] = pd.to_datetime(df["Date"], format="%Y-%m-%d")
+        return df

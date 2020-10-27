@@ -36,6 +36,7 @@ class Range:
     timezone_offset: int = 4
 
     def __init__(self, key: str):
+        print("key", key)
         """
         Args:
             key (str): range value, checked against allowed[]

@@ -44,5 +44,13 @@ def is_int(val):
         return False
 
 
+def is_float(val):
+    try:
+        float(val)
+        return True
+    except ValueError:
+        return False
+
+
 def format_candlekey(str):
     return str.lower().capitalize()

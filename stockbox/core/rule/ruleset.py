@@ -1,3 +1,6 @@
+from stockbox.common.log import Log
+
+
 class RuleSet:
     """Class defines the comparison rules to return a boolean. Once
     processed, the class then can later the containing Setup class to
@@ -17,14 +20,17 @@ class RuleSet:
         self.name = name
         self.rules = []
         self.actions = {"alter": [], "action": []}
+        Log.info(self.name)
 
     def add(self, rule):
         self.rules.append(rule)
+        Log.info(rule.statement)
 
     def process(self, window=None):
         for rule in self.rules:
             # print(f"rule statement: {rule.statement}")
             if not rule.process(window):
+                # print(f"rule statement: {rule.statement}")
                 return False
         return True
 

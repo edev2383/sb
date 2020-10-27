@@ -128,9 +128,9 @@ class PositionController:
             self.set_totalrisk()
             / (share_price - self.position_config["stop_loss"])
         )
-        print("num of shares: ", num_of_shares)
-        print("total risk :", self.set_totalrisk())
-        print("config: ", self.position_config)
+        # print("num of shares: ", num_of_shares)
+        # print("total risk :", self.set_totalrisk())
+        # print("config: ", self.position_config)
         return self.validate_shares(
             math.floor(min([i for i in num_of_shares if i])), share_price
         )
@@ -200,12 +200,12 @@ class PositionController:
             if self.__prime_date is not None:
                 delta_t = window["Date"] - self.__prime_date
                 if delta_t.days > self.length_valid_prime:
-                    print(" ")
-                    print(" *********** RESET CALLED ************")
-                    print("TYPE: length_valid_prime")
-                    print(window)
-                    print(" _________ END RESET _________ ")
-                    print(" ")
+                    # print(" ")
+                    # print(" *********** RESET CALLED ************")
+                    # print("TYPE: length_valid_prime")
+                    # print(window)
+                    # print(" _________ END RESET _________ ")
+                    # print(" ")
                     self.Setup.reset()
 
     @property

@@ -21,6 +21,8 @@ class Position:
 
     Controller = None
 
+    stoploss_triggered: bool = False
+
     def __init__(self, config):
         for (prop, value) in config.items():
             setattr(self, prop, value)
@@ -28,14 +30,15 @@ class Position:
     def open(self, window):
         self.entry_price = window["Close"]
         self.entry_date = window["Date"]
-        print("OPEN POSITION: -============================================== ")
-        print(window)
+        # print("OPEN POSITION: -============================================== ")
+        # print(window)
 
     def update(self, window):
         self.days_active += 1
         if self.stoploss_hit(window):
             print("We hit a stoploss here")
             window["Close"] = self.stop_loss
+            self.stoploss_triggered = True
             self.close(window)
 
         # need to run process in here to determine if we've lapse on any
@@ -43,6 +46,14 @@ class Position:
 
     def close(self, window):
         self.days_active += 1
+        if self.stoploss_hit(window):
+            print("We hit a stoploss here")
+            print("stoploss: ", self.stop_loss)
+            print(window)
+            print("--------------------------------------------")
+            print("-")
+            window["Close"] = self.stop_loss
+            self.stoploss_triggered = True
         self.exit_price = window["Close"]
         self.exit_date = window["Date"]
         self.profit_loss = self.update_pnl(window)
@@ -64,9 +75,11 @@ class Position:
             "days_held": self.days_active,
             "total_pnl": round(self.profit_loss, 2),
             "date_prime": self.__prime_date,
+            "stop_loss": int(self.stoploss_triggered),
         }
 
     def stoploss_hit(self, window):
+        # print(f" low: {l} - sl: {self.stop_loss}")
         return window["Low"] < self.stop_loss
 
     @property

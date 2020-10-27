@@ -37,5 +37,5 @@ class Scraper:
             }
         )
 
-    def current(self):
-        BG().request_current()
+    def current(self, symbols: list):
+        BG().request_current(symbols)

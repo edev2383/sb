@@ -11,8 +11,11 @@ class RelativeStrengthIndex(Indicator):
     name: str = "RSI"
 
     def perform_calculation(self):
+        colkey = "Adj Close"
         self.df = self.df[::-1]
-        self.df[self.name] = self.calc_rsi(self.df["Adj_Close"]).fillna(0)
+        if "Adj_Close" in self.df.columns:
+            colkey = "Adj_Close"
+        self.df[self.name] = self.calc_rsi(self.df[colkey]).fillna(0)
         return self.df[::-1]
 
     def calc_rsi(self, data, time_window=14):
@@ -22,10 +25,12 @@ class RelativeStrengthIndex(Indicator):
         up_chg = 0 * diff
         down_chg = 0 * diff
 
-        # up change is equal to the positive difference, otherwise equal to zero
+        # up change is equal to the positive difference,
+        # otherwise equal to zero
         up_chg[diff > 0] = diff[diff > 0]
 
-        # down change is equal to negative deifference, otherwise equal to zero
+        # down change is equal to negative deifference, otherwise equal
+        # to zero
         down_chg[diff < 0] = diff[diff < 0]
 
         # we set com=time_window-1 so we get decay alpha=1/time_window
