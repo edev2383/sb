@@ -48,28 +48,21 @@ class RuleSet:
     def alter_setup_action(self, Action, window):
         self.Setup.take_action(Action, window)
 
-    def define_action(self, action: str, prop=None, value=None, Action=None):
+    def define_action(self, prop=None, value=None, Action=None):
         """define an action to activate when the RuleSet returns true
         `alter` takes priority over `action`, all are called in the same
         order they are defined
 
         Args:
-            action (str): `alter`|`action`
             prop (string, optional): a settings prop in Setup class.
                                      Defaults to None.
             value (float|int|bool, optional):  Defaults to None.
             Action (Action, optional): [description]. Defaults to None.
         """
-        if action == "alter":
-            if prop is None or value is None:
-                print("RuleSet error: Missing `prop` or `value` attributes")
-                exit()
-            self.actions["alter"].append({"prop": prop, "value": value})
-        elif action == "action":
-            if Action is None:
-                print("RuleSet error: Missing `Action` attribute")
-                exit()
+        if Action:
             self.actions["action"].append(Action)
+        if prop:
+            self.actions["alter"].append({"prop": prop, "value": value})
 
     def run_actions(self, window):
         if self.tickerstate == self.Ticker.state:

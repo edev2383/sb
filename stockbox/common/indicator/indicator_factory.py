@@ -3,6 +3,7 @@ from .relative_strength_index import RelativeStrengthIndex
 from .simple_moving_average import SimpleMovingAverage
 from .slow_stochastic import SlowStochastic
 from .exponential_moving_average import ExponentialMovingAverage
+from .slope import Slope
 
 
 class IndicatorFactory:
@@ -44,13 +45,14 @@ class IndicatorFactory:
             "slowsto": SlowStochastic,
             "rsi": RelativeStrengthIndex,
             "ema": ExponentialMovingAverage,
+            "slope": Slope,
         }
         func = switcher.get(key)
         if func:
             return func(self.Ticker.history().copy(), range)
         else:
             print(f"Provided indicator key not found: {key}")
-            print(f"Valid keys: ", switcher.keys())
+            print("Valid keys: ", switcher.keys())
             exit()
 
     @staticmethod
