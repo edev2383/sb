@@ -32,7 +32,6 @@ class Rule:
         self.rule = RuleParser(statement).process()
         if Ticker:
             self.Ticker = Ticker
-        # print("focus key: ", self.rule["focus"]["key"])
 
     def process(self, window=None):
         """[summary]
@@ -47,6 +46,8 @@ class Rule:
             self.window = window
         focus = self.getfocus()
         comp = self.getcomp()
+        print(f"focus: {focus}")
+        print(f"comp: {comp}")
         if not focus or not comp:
             return False
         return Calc(focus, self.rule["operator"], comp).calc()
@@ -100,10 +101,11 @@ class Rule:
         col = self.validate_indicator_column(self.rule[rulekey]["key"])
         # days back from index (0-indexed)
         fi = self.rule[rulekey]["from_index"]
+        print(f"col: {col}, fi: {fi}")
         # return False if the requested from_index is beyond the window
         if int(fi) not in self.window.index:
             return False
-        return self.window.at[int(fi), col]
+        return self.window.iloc[int(fi)].at[col]
 
     def validate_indicator_column(self, key):
         """check if the column name is present in the dataframe,

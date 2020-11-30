@@ -15,7 +15,6 @@ class SimpleMovingAverage(Indicator):
 
     def perform_calculation(self):
         self.df = self.df.iloc[::-1]
-
         self.df[self.name] = (
             self.df.iloc[:, self.colkey].rolling(window=self.range).mean()
         )

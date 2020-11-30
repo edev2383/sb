@@ -49,17 +49,21 @@ class History:
         return self.format_history(history)
 
     def format_history(self, df):
+
         df = self.adddelta(df)
         df = self.addpercent_d(df)
         df = self.converttodatetime(df)
-        return df[::-1]
+        df = df[::-1]
+        df = df.reset_index()
+        df.set_index("Date", inplace=True, append=True, drop=False)
+        return df
 
     def adddelta(self, df):
-        df["Delta"] = round(df["Open"] - df["Adj Close"], 2)
+        df["Change"] = round(df["Adj Close"] - df["Open"], 2)
         return df
 
     def addpercent_d(self, df):
-        df["% Delta"] = round(df["Delta"] / df["Open"], 2)
+        df["Change %"] = round(df["Change"] / df["Open"] * 100, 2)
         return df
 
     def converttodatetime(self, df):

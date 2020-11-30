@@ -7,6 +7,7 @@ class Slope(Indicator):
     name: str = "Slope"
 
     def perform_calculation(self):
+        # TODO - add a check to ensure that there is a matching SMA col
         self.df = self.df.iloc[::-1]
         target = self.df[f"SMA({self.range})"]
 
@@ -25,4 +26,7 @@ class Slope(Indicator):
         # reset_index swaps their order logically
         # what came in as index 9 -> 8, becomes 0 -> 1, so we sub 1 de
         values = values.reset_index()
-        return values.at[1, 0] - values.at[0, 0]
+        slope = values.at[1, 0] - values.at[0, 0]
+        if slope > 5:
+            return 0
+        return slope

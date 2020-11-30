@@ -78,7 +78,7 @@ class Setup:
             pattern.inject_ticker_to_rules(self.Ticker)
         return Patterns
 
-    def process(self, window=None):
+    def backtest(self, window=None):
         """loop through valid RuleSet objects to process their rules
         if all rules are true call RuleSet.run_actions()
 
@@ -99,9 +99,9 @@ class Setup:
                 # dt = window.at[0, "Date"]
                 ruleset.run_actions(window.iloc[0])
             else:
-                # print("name: ", ruleset.name)
-                # # print("---[ WINDOW ]---------------")
-                # print(window.at[0, "Date"])
+                print("name: ", ruleset.name)
+                # print("---[ WINDOW ]---------------")
+                print(window)
                 # print("----------------------------")
                 # print(" ")
                 self.run_on_ruleset_failure(window.iloc[0])
@@ -144,6 +144,21 @@ class Setup:
 
     def set_primedate(self, date):
         self.position_controller.prime_date = date
+
+    def scan_current(self, window=None):
+        """loop through valid RuleSet objects to process their rules
+        if all rules are true call RuleSet.run_actions()
+
+        Args:
+            window (dataframe, optional): passed dataframe to process
+            if None, RuleSet will process the provided ticker
+        """
+        for ruleset in self.get_patterns_to_process():
+            value = ruleset.process(window)
+            if value:
+                return True
+            else:
+                return False
 
 
 #

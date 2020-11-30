@@ -38,4 +38,4 @@ class Scraper:
         )
 
     def current(self, symbols: list):
-        BG().request_current(symbols)
+        return BG().request_current(symbols)

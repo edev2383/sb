@@ -12,7 +12,7 @@ class Indicator:
         self.df = dataframe
         self.range = range
         self.set_header_name()
-        self.colkey = column_index(self.df, ["Adj_Close"])
+        self.colkey = column_index(self.df, ["Adj Close"])
 
     def set_header_name(self):
         if self.range:

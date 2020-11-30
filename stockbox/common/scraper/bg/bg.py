@@ -22,8 +22,7 @@ class BG:
             raw = self.tree.xpath(self.scrape_xpath)
             Log.info(f"bg - {raw[0]}")
 
-            arr = self.format_results(raw)
-            print(arr)
+            return self.format_results(raw)
         except HTTPError as e:
             Log.debug(e.code)
             Log.debug(e.read())
@@ -39,7 +38,7 @@ class BG:
         breakarr = np.split(nparr, self.symbol_count)
         cols = [
             "Symbol",
-            "Last",
+            "Close",
             "Change",
             "% Change",
             "High",
@@ -50,9 +49,20 @@ class BG:
         return self.clean_df(pd.DataFrame(data=breakarr, columns=cols))
 
     def clean_df(self, df):
-        print("clean_df: ", df)
+        df = df.drop(columns=["Time"])
+        df["Date"] = pd.to_datetime("today").strftime("%Y-%m-%d")
+        df["Date_Index"] = pd.to_datetime("today").strftime("%Y-%m-%d")
         df["Volume"] = df["Volume"].apply(lambda x: int(x.replace(",", "")))
-        df["Last"] = df["Last"].apply(lambda x: float(x.replace(",", "")))
+        df["Close"] = df["Close"].apply(lambda x: float(x.replace(",", "")))
         df["High"] = df["High"].apply(lambda x: float(x.replace(",", "")))
         df["Low"] = df["Low"].apply(lambda x: float(x.replace(",", "")))
+        df["Change"] = df["Change"].apply(self.__validate_change)
+        df["Open"] = df["Close"] - df["Change"]
+        df["Adj Close"] = df["Close"]
+        df = df.set_index(["Date_Index"])
         return df
+
+    def __validate_change(self, value):
+        if value == "UNCH":
+            return float(0)
+        return float(value.replace(",", ""))

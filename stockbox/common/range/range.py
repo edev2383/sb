@@ -113,7 +113,7 @@ class Range:
         end = self.default_end()
         return {
             "start": end - (3600 * 24 * 90) - (3600 * self.eodHour),
-            "end": end,
+            "end": end,  # - (2 * 86400), # 2 day ajustment for testing
         }
 
     def six_month(self):
@@ -123,6 +123,7 @@ class Range:
             "end": end,
         }
 
+    # 1605304800
     def one_year(self):
         end = self.default_end()
         return {

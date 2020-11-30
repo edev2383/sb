@@ -12,9 +12,10 @@ class IndicatorFactory:
 
     re_range = r"(.*)\(([0-9]+)\)"
 
-    def __init__(self, indicator_tag, Ticker):
+    def __init__(self, indicator_tag, Ticker, scope="daily"):
         self.tag = indicator_tag
         self.Ticker = Ticker
+        self.scope = scope
 
     def process(self):
         """Get the key and range from the provided tag, use those values
@@ -49,14 +50,14 @@ class IndicatorFactory:
         }
         func = switcher.get(key)
         if func:
-            return func(self.Ticker.history().copy(), range)
+            return func(self.Ticker.history(self.scope).copy(), range)
         else:
             print(f"Provided indicator key not found: {key}")
             print("Valid keys: ", switcher.keys())
             exit()
 
     @staticmethod
-    def create(indicator_tag, Ticker):
+    def create(indicator_tag, Ticker, scope="daily"):
         """Static method to create the indicator and return the history
 
         Args:
@@ -66,4 +67,4 @@ class IndicatorFactory:
         Returns:
             [type]: [description]
         """
-        return IndicatorFactory(indicator_tag, Ticker).process()
+        return IndicatorFactory(indicator_tag, Ticker, scope).process()
