@@ -101,7 +101,7 @@ setup_exit.add(Rule("[yesterday Close] < [two days ago Low]"))
 
 setup_exit.define_action("action", Action=Sell())
 
-SimpleSetup = Setup([pattern, confirmation])
+SimpleSetup = Setup([pattern, confirmation, setup_exit])
 ```
 
 
@@ -110,8 +110,34 @@ Setup takes a list of RuleSets as the only required argument. There are addition
 
 
 ## Backtest
-The Backtest class iterates through the dataframe, checking each index for the various _RuleSets_ via the _Setup_ class.
+The Backtest class iterates through the dataframe, ever-expanding the active 'window' with each iteration, checking each new index for the various _RuleSets_ via the _Setup_ class. If any Rule for an index triggers `False`, the index is short-circuited and backtest moves on to the next iteration. If all indexes are True for the Rule, Setup triggers the RuleSet to take the predefined action. A PositionController class within the Setup handles the Position logic, while the Position class handles internal math and stoploss checks. 
 
+The output below is from an equity backtest, using the above defined "SimpleSetup" over a 5yr period
+
+```python
+
+def run():
+    bt = Backtest(Ticker("XXXX", "5y"), SimpleSetup)
+    bt.bank = 10000
+    bt.process()
+    
+run()
+
+#	    bank_end  bank_start date_enter  date_exit date_prime  days_held  pos_id  price_enter  price_exit  stop_loss  total_pnl  total_shares
+#	 0    9850.06    10000.00 2016-01-12 2016-01-14 2016-01-11        2.0  574656     2.390000    2.210000        0.0    -149.94         833.0
+#	 1    9653.16     9850.06 2016-01-29 2016-02-02 2016-01-21        2.0  844736     2.200000    1.980000        1.0    -196.90         895.0
+#	 2    9625.60     9653.16 2016-03-17 2016-04-05 2016-03-14       12.0  595616     2.800000    2.760000        0.0     -27.56         689.0
+#	 3    9529.42     9625.60 2016-04-18 2016-04-19 2016-04-06        1.0  136864     2.760000    2.620000        0.0     -96.18         687.0
+#	 4    9339.02     9529.42 2016-04-22 2016-04-25 2016-04-20        2.0  783952     3.990000    3.590000        1.0    -190.40         476.0
+#	 . . .
+#	 68  11578.88    11580.20 2020-06-30 2020-07-01 2020-06-12        1.0  575568    52.610001   52.580002        0.0      -1.32          44.0
+#	 69  11825.72    11578.88 2020-07-24 2020-08-11 2020-07-22       12.0  576672    69.400002   76.879997        0.0     246.84          33.0
+#	 70  11819.28    11825.72 2020-08-20 2020-09-03 2020-08-12       10.0  090608    82.769997   82.540001        0.0      -6.44          28.0
+#	 71  11753.45    11819.28 2020-09-15 2020-09-16 2020-09-09        1.0  135232    78.930000   76.660004        0.0     -65.83          29.0
+#	 72  11904.65    11753.45 2020-09-25 2020-10-09 2020-09-21       10.0  574272    78.059998   83.099998        0.0     151.20          30.0
+# 
+#  Final Bank Total: 11904.65
+```
 > More docs to come
 
 Rules (note for later):
